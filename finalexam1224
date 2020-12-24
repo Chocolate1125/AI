@@ -1,0 +1,19 @@
+import requests
+from bs4 import BeautifulSoup
+
+my_params = {'q': input("您好" + '！！請問您今天想查詢什麼呢？')}
+google_url = 'https://www.google.com.tw/search'
+information = requests.get(google_url, params = my_params)
+if information.status_code == requests.codes.ok:
+  # 以 BeautifulSoup 解析 HTML 原始碼
+  soup = BeautifulSoup(information.text, 'html.parser')
+
+  # 觀察 HTML 原始碼
+  #print(soup.prettify())
+
+  # 以 CSS 的選擇器來抓取 Google 的搜尋結果
+  items = soup.select('div.kCrYT > a[href^="/url"]')
+  
+  for i in items:
+    print("標題: " + i.text)
+    print("網址: " + i.get("href")[7:9999])
